@@ -7,9 +7,9 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const swaggerSetup = require('./config/swagger');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const gameRoutes = require('./routes/game');
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.route');
+const gameRoutes = require('./routes/game.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,7 +39,7 @@ swaggerSetup(app);
 // Routes API
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api', gameRoutes);
+app.use('/api/game', gameRoutes);
 
 // Route de test
 app.get('/api/health', (req, res) => {

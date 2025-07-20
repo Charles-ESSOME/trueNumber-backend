@@ -91,3 +91,47 @@ module.exports = {
   idValidation,
   handleValidationErrors
 };
+
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: 'Erreurs de validation',
+      errors: errors.array()
+    });
+  }
+  next();
+};
+
+const updateUserValidation = [
+  body('username')
+    .optional()
+    .trim()
+    .isLength({ min: 3, max: 30 })
+    .withMessage('Le nom d\'utilisateur doit contenir entre 3 et 30 caractères'),
+  
+  body('email')
+    .optional()
+    .trim()
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Format d\'email invalide'),
+  
+  body('phone')
+    .optional()
+    .trim()
+    .matches(/^[\+]?[0-9\s\-\(\)]{8,15}$/)
+    .withMessage('Format de numéro de téléphone invalide'),
+  
+  body('role')
+    .optional()
+    .isIn(['client', 'admin'])
+    .withMessage('Le rôle doit être "client" ou "admin"')
+];
+
+module.exports = {
+  validateRequest,
+  registerValidation,
+  loginValidation,
+  updateUserValidation
+};
