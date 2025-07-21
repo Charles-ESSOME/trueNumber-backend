@@ -13,11 +13,14 @@ const playGame = async (req, res) => {
     
     // Calculer le changement de solde
     const balanceChange = result === 'gagné' ? 50 : -35;
+
+    console.log(`Joueur ID: ${req.user?.username || userId}, Nombre généré: ${generatedNumber}, Résultat: ${result}, Changement de solde: ${balanceChange}`);
+    
     
     // Récupérer l'utilisateur avec le solde actuel
     const user = await User.findById(userId);
     const previousBalance = user.balance;
-    const newBalance = Math.max(0, previousBalance + balanceChange); // Le solde ne peut pas être négatif
+    const newBalance = previousBalance + balanceChange; // Le solde peut pas être négatif
     
     // Mettre à jour le solde de l'utilisateur
     await User.findByIdAndUpdate(userId, { balance: newBalance });
